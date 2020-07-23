@@ -3,7 +3,11 @@
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
-          <Node />
+          <Node name="request_scheduler_consumer" expanded="True">
+            <Node name="request_scheduler_consumer" expanded="True">
+              <Node name="Startup.cs" selected="True" />
+            </Node>
+          </Node>
         </State>
       </Pad>
     </Pads>

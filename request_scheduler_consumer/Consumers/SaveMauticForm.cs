@@ -2,12 +2,12 @@
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-using request_scheduler_consumer.Domain.MauticForms.Entities;
+using request_scheduler_consumer.Domain.MauticForms.Dtos;
 using request_scheduler_consumer.Domain.MauticForms.Interfaces;
 
 namespace request_scheduler_consumer.Consumers
 {
-    public class SendMauticForm : ISendMauticForm
+    public class SaveMauticForm : ISaveMauticForm
     {
         private ConnectionFactory _factory { get; set; }
         private IConnection _connection { get; set; }
@@ -15,7 +15,7 @@ namespace request_scheduler_consumer.Consumers
 
         private IMauticFormService _mauticFormService;
 
-        public SendMauticForm(IMauticFormService mauticFormService)
+        public SaveMauticForm(IMauticFormService mauticFormService)
         {
             _factory = new ConnectionFactory() { HostName = "localhost" };
             _connection = _factory.CreateConnection();
@@ -26,16 +26,16 @@ namespace request_scheduler_consumer.Consumers
 
         public void Register()
         {
-            _channel.QueueDeclare(queue: "mautic-form", durable: false, exclusive: false, autoDelete: false, arguments: null);
+            _channel.QueueDeclare(queue: "mautic-form-to-save", durable: false, exclusive: false, autoDelete: false, arguments: null);
             var consumer = new EventingBasicConsumer(_channel);
             consumer.Received += (model, ea) =>
             {
                 var body = ea.Body;
                 var message = Encoding.UTF8.GetString(body.ToArray());
-                var mauticForm = JsonConvert.DeserializeObject<MauticForm>(message);
-                _mauticFormService.Send(mauticForm);
+                var mauticForm = JsonConvert.DeserializeObject<MauticFormRequestDto>(message);
+                _mauticFormService.Save(mauticForm);
             };
-            _channel.BasicConsume(queue: "mautic-form",
+            _channel.BasicConsume(queue: "mautic-form-to-save",
                                  autoAck: true,
                                  consumer: consumer);
         }

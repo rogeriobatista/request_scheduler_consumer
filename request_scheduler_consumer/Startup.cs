@@ -27,15 +27,13 @@ namespace request_scheduler_consumer
             services.AddScoped(typeof(IMauticFormRepository), typeof(MauticFormRepository));
             services.AddScoped(typeof(IMauticFormService), typeof(MauticFormService));
             services.AddScoped(typeof(ISendMauticForm), typeof(SendMauticForm));
+            services.AddScoped(typeof(ISaveMauticForm), typeof(SaveMauticForm));
 
             services.AddControllers();
-
-            services.AddDbContext<RequestSchedulerContext>(options =>
-            options.UseNpgsql(Configuration.GetConnectionString("PostgreSql")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ISendMauticForm sendMauticForm)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ISendMauticForm sendMauticForm, ISaveMauticForm saveMauticForm)
         {
             if (env.IsDevelopment())
             {
@@ -54,6 +52,8 @@ namespace request_scheduler_consumer
             });
 
             sendMauticForm.Register();
+            saveMauticForm.Register();
+
         }
     }
 }

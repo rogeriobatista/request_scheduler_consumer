@@ -9,9 +9,7 @@ namespace request_scheduler_consumer.Data.Context
     {
         public DbSet<MauticForm> MauticFormRequests { get; set; }
 
-        public RequestSchedulerContext(DbContextOptions<RequestSchedulerContext> options) : base(options) { }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => optionsBuilder.UseNpgsql("User ID=postgres;Password=postgres;Host=localhost;Port=5432;Database=requestscheduler;Pooling=true;");
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

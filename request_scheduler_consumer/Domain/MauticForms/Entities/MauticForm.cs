@@ -24,11 +24,11 @@ namespace request_scheduler_consumer.Domain.MauticForms.Entities
 
         public MauticFormStatus Status { get; private set; }
 
-        public MauticFormSendFrequency SendFrequency { get; private set; }
+        public string CronId { get; private set; }
 
         protected MauticForm() { }
 
-        public MauticForm(string destinyAddress, HttpMethod httpMethod, string contentType, string headers, string body, MauticFormSendFrequency sendFrequency)
+        public MauticForm(string destinyAddress, HttpMethod httpMethod, string contentType, string headers, string body, string cronId)
         {
             CreatedAt = DateTime.Now;
             Status = MauticFormStatus.Pending;
@@ -37,7 +37,7 @@ namespace request_scheduler_consumer.Domain.MauticForms.Entities
             ContentType = contentType;
             Headers = headers;
             Body = body;
-            SendFrequency = sendFrequency;
+            CronId = cronId;
         }
 
         public void SetUpdatedAt()
@@ -75,9 +75,9 @@ namespace request_scheduler_consumer.Domain.MauticForms.Entities
             Status = status;
         }
 
-        public void UpdateSendFrequency(MauticFormSendFrequency sendFrequency)
+        public void UpdateCronId(string cronId)
         {
-            SendFrequency = sendFrequency;
+            CronId = cronId;
         }
     }
 }
